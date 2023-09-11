@@ -4,15 +4,27 @@ import axios from 'axios'
 
 const CreateProduct = (props) => {
     const [product, setProduct] = useState({ Title: "", Price: "", Description: "" })
-    useEffect(() => {
-        axios.get("http://localhost:8000/api/product")
-            .then(serverResponse => {
-                console.log(serverResponse.data, "✅✅✅")
-                setPeople(serverResponse.data)
-            })
-            .catch(serverError => console.log(serverError, "❌❌❌"))
-    }, [])
+    // useEffect(() => {
+    //     axios.get("http://localhost:8000/api/product")
+    //         .then(serverResponse => {
+    //             console.log(serverResponse.data, "✅✅✅")
+    //             setProduct(serverResponse.data)
+    //         })
+    //         .catch(serverError => console.log(serverError, "❌❌❌"))
+    // }, [])
+    const handlerForm = (e) => {
+        e.preventDefault()
+        console.log("MY PRODUCT :", product);
+        axios.post("http://localhost:8000/api/product", product)
+            .then(serverResponse => console.log(serverResponse))
+            .catch(serverError => console.log(serverError))
 
+        setProduct({
+            Title: "",
+            Price: "",
+            Description: ""
+        })
+    }
 
     return (
         <fieldset>
@@ -22,7 +34,7 @@ const CreateProduct = (props) => {
             <h4>
                 Product FROM STATE {JSON.stringify(product)}
             </h4>
-            <form >
+            <form onSubmit={handlerForm}>
                 <p>Title: <input type='text'
                     onChange={(e) => setProduct({ ...product, Title: e.target.value })}
                     value={product.Title}
